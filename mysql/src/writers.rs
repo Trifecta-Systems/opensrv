@@ -22,7 +22,7 @@ use crate::myc::io::WriteMysqlExt;
 use crate::packet_writer::PacketWriter;
 use crate::{Column, ErrorKind, OkResponse};
 
-const BIN_GENERAL_CI: u16 = 0x3f;
+const UTF8_GENERAL_CI: u16 = 0x21;
 
 pub(crate) async fn write_eof_packet<W: AsyncWrite + Unpin>(
     w: &mut PacketWriter<W>,
@@ -132,7 +132,7 @@ where
         w.write_lenenc_str(c.column.as_bytes())?;
         w.write_lenenc_str(b"")?;
         w.write_lenenc_int(0xC)?;
-        w.write_u16::<LittleEndian>(BIN_GENERAL_CI)?;
+        w.write_u16::<LittleEndian>(UTF8_GENERAL_CI)?;
         w.write_u32::<LittleEndian>(1024)?;
         w.write_u8(c.coltype as u8)?;
         w.write_u16::<LittleEndian>(c.colflags.bits())?;
